@@ -1,6 +1,10 @@
 # swoole-nginx-mysql-docker
 
+EN | [Português](#como-usar)
+
 Run Swoole applications in containers that uses NGINX as a reverse proxy and MySQL as the database service for the application.
+
+Rode apps Swoole em containers que usam nginx como proxy reverso e o serviço de banco de dados mysql.
 
 ## First step
 
@@ -20,9 +24,7 @@ Finally, in the `src/` directory lies the source-code of your Swoole application
 
 Note that the `src/public/` folder is publicly accessible for the web.
 
---
-
-Sirva apps Swoole em containers que usam nginx como proxy reverso e o serviço de banco de dados mysql.
+# Instruções em Português
 
 ## Como usar
 
