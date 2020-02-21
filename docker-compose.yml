@@ -1,0 +1,52 @@
+version: '3'
+
+networks:
+    backend:
+
+services:
+    db:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        volumes:
+          - ./mysql:/var/lib/mysql
+        env_file:
+          - .env
+        networks:
+          - backend
+
+    php:
+        build:
+            context: ./php
+            dockerfile: Dockerfile
+        ports:
+          - 9501:9501
+        volumes:
+          - ./src:/usr/share/nginx/src:ro
+          - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+          - ./static/static:/usr/share/nginx/storage/static:rw # uploads directory
+        networks:
+          - backend
+        depends_on:
+          - db
+        links:
+          - db:mysql
+        entrypoint: /entrypoint.sh
+        working_dir: /usr/share/nginx/src/public
+
+    nginx:
+        image: nginx:stable-alpine
+        ports:
+          - ${PORT}:80
+        volumes:
+          - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+          - ./nginx/conf.d:/etc/nginx/conf.d:ro
+          - ./static/html:/usr/share/nginx/html:ro
+          - ./static/static:/usr/share/nginx/storage/static:ro # static files directory
+        networks:
+          - backend
+        depends_on:
+          - php
+          - db
+        links:
+          - php:swoole
